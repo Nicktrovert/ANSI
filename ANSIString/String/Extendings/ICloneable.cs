@@ -2,6 +2,10 @@
 {
     public sealed partial class ANSIString : ICloneable
     {
+        /// <summary>
+        /// Method to create a copy of the <see cref="ANSI.String.ANSIString"/> instance
+        /// </summary>
+        /// <returns>A clone of the <see cref="ANSI.String.ANSIString"/> instance as <see cref="object"/></returns>
         public object Clone()
         {
             ANSIString ANSI = new ANSIString();
