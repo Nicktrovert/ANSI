@@ -2,6 +2,9 @@
 {
     public sealed partial class ANSIString
     {
+        /// <summary>
+        /// Increment operator to increase the foreground color
+        /// </summary>
         public static ANSIString operator ++(ANSIString ANSIs)
         {
             ANSIString s = (ANSIString)ANSIs.Clone();
@@ -16,6 +19,9 @@
             }
             return s;
         }
+        /// <summary>
+        /// Decrement operator to decrease the foreground color
+        /// </summary>
         public static ANSIString operator --(ANSIString ANSIs)
         {
             ANSIString s = (ANSIString)ANSIs.Clone();
@@ -32,7 +38,9 @@
         }
 
 
-
+        /// <summary>
+        /// Operator to set the foreground color using ConsoleColor
+        /// </summary>
         public static ANSIString operator +(ANSIString ANSIs, ConsoleColor c)
         {
             ANSIString s = (ANSIString)ANSIs.Clone();
@@ -41,6 +49,9 @@
             ANSIs.SetForegroundColor(rgb.Item1, rgb.Item2, rgb.Item3);
             return s;
         }
+        /// <summary>
+        /// Operator to set the background color using ConsoleColor
+        /// </summary>
         public static ANSIString operator -(ANSIString ANSIs, ConsoleColor c)
         {
             ANSIString s = (ANSIString)ANSIs.Clone();

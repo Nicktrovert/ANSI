@@ -2,6 +2,7 @@
 {
     public sealed partial class ANSIString
     {
+        // Boolean properties for various text decorations
         public bool Bold = false;
         public bool Dim = false;
         public bool Italic = false;

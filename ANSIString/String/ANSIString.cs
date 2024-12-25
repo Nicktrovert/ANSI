@@ -2,21 +2,27 @@
 {
     public sealed partial class ANSIString
     {
+        // ANSI escape sequence introducer
         private const string SEQC = "\u001b[";
 
+        // The actual text value of the ANSIString
         public string Value = "";
+        // Indexer to access individual characters with ANSI formatting
         public string this[int i]
         {
             get => GetANSI() + Value[i] + SEQC + "0m";
             private set => throw new UnauthorizedAccessException();
         }
 
+        // Constructor to initialize ANSIString with a specified color mode
         public ANSIString(ANSIColorMode colorMode = ANSIColorMode.Color256)
         {
+            // Send an ANSI escape sequence to the console to enable 256-color mode
             Console.Write("\u001b[=19h");
             this.ColorMode = colorMode;
         }
 
+        // Method to construct ANSI escape codes based on the properties of the ANSIString
         private string GetANSI()
         {
             string ANSIData = $"{SEQC}0m";

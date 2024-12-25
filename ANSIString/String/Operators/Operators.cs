@@ -2,6 +2,9 @@
 {
     public sealed partial class ANSIString
     {
+        /// <summary>
+        /// Operator to reverse the string
+        /// </summary>
         public static ANSIString operator ~(ANSIString ANSIs)
         {
             ANSIString s = (ANSIString)ANSIs.Clone();
@@ -9,6 +12,9 @@
             return s;
         }
 
+        /// <summary>
+        /// Operator to set the inverse colors
+        /// </summary>
         public static ANSIString operator -(ANSIString ANSIs)
         {
             ANSIString s = (ANSIString)ANSIs.Clone();
