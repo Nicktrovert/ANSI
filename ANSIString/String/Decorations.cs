@@ -3,13 +3,13 @@
     public sealed partial class ANSIString
     {
         // Boolean properties for various text decorations
-        public bool Bold = false;
-        public bool Dim = false;
-        public bool Italic = false;
-        public bool Underline = false;
-        public bool Blink = false;
-        public bool Inverse = false;
-        public bool Invisible = false;
-        public bool Strikethrough = false;
+        public bool Bold { get; set; }
+        public bool Dim { get; set; }
+        public bool Italic { get; set; }
+        public bool Underline { get; set; }
+        public bool Blink { get; set; }
+        public bool Inverse { get; set; }
+        public bool Invisible { get; set; }
+        public bool Strikethrough { get; set; }
     }
 }

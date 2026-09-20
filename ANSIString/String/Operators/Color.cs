@@ -1,64 +1,52 @@
-﻿namespace ANSI.String
+namespace ANSI.String
 {
     public sealed partial class ANSIString
     {
-        /// <summary>
-        /// Increment operator to increase the foreground color
-        /// </summary>
-        public static ANSIString operator ++(ANSIString ANSIs)
+        /// <summary>Advances the foreground palette index, or increases RGB channels with saturation.</summary>
+        public static ANSIString operator ++(ANSIString text) => ShiftForeground(text, 1);
+
+        /// <summary>Decreases the foreground palette index, or decreases RGB channels with saturation.</summary>
+        public static ANSIString operator --(ANSIString text) => ShiftForeground(text, -1);
+
+        private static ANSIString ShiftForeground(ANSIString text, int delta)
         {
-            ANSIString s = (ANSIString)ANSIs.Clone();
-            if (ANSIs.ColorMode == ANSIColorMode.Color8)
+            ArgumentNullException.ThrowIfNull(text);
+            ANSIString result = text.Clone();
+            if (text.ColorMode == ANSIColorMode.TrueColor)
             {
-                s.FGColor += 1;
-                if (s.FGColor > 37) throw new Exception("The string can not be incremented any further.");
+                result.SetForegroundColor(
+                    Math.Clamp(text.foreground.R + delta, 0, 255),
+                    Math.Clamp(text.foreground.G + delta, 0, 255),
+                    Math.Clamp(text.foreground.B + delta, 0, 255));
             }
             else
             {
-                ANSIs.SetForegroundColor((short)(ANSIs.FG_R + 1), (short)(ANSIs.FG_G + 1), (short)(ANSIs.FG_B + 1));
+                int index = text.ColorMode == ANSIColorMode.Color8
+                    ? text.foreground.BasicIndex : text.foreground.PaletteIndex;
+                int maximum = text.ColorMode == ANSIColorMode.Color8 ? 7 : 255;
+                if (index + delta < 0 || index + delta > maximum)
+                    throw new InvalidOperationException("The foreground color has reached the palette boundary.");
+                result.SetForegroundPaletteColor(index + delta);
             }
-            return s;
-        }
-        /// <summary>
-        /// Decrement operator to decrease the foreground color
-        /// </summary>
-        public static ANSIString operator --(ANSIString ANSIs)
-        {
-            ANSIString s = (ANSIString)ANSIs.Clone();
-            if (ANSIs.ColorMode == ANSIColorMode.Color8)
-            {
-                s.FGColor -= 1;
-                if (s.FGColor < 30) throw new Exception("The string can not be decremented any further.");
-            }
-            else
-            {
-                ANSIs.SetForegroundColor((short)(ANSIs.FG_R - 1), (short)(ANSIs.FG_G - 1), (short)(ANSIs.FG_B - 1));
-            }
-            return s;
+            return result;
         }
 
-
-        /// <summary>
-        /// Operator to set the foreground color using ConsoleColor
-        /// </summary>
-        public static ANSIString operator +(ANSIString ANSIs, ConsoleColor c)
+        /// <summary>Returns a copy with the specified foreground color.</summary>
+        public static ANSIString operator +(ANSIString text, ConsoleColor color)
         {
-            ANSIString s = (ANSIString)ANSIs.Clone();
-            s.FGColor = (short)(30 + s.ConsoleColorToInt(c));
-            var rgb = ANSIs.ConsoleColorToRGB(c);
-            ANSIs.SetForegroundColor(rgb.Item1, rgb.Item2, rgb.Item3);
-            return s;
+            ArgumentNullException.ThrowIfNull(text);
+            ANSIString result = text.Clone();
+            result.SetForegroundColor(color);
+            return result;
         }
-        /// <summary>
-        /// Operator to set the background color using ConsoleColor
-        /// </summary>
-        public static ANSIString operator -(ANSIString ANSIs, ConsoleColor c)
+
+        /// <summary>Returns a copy with the specified background color.</summary>
+        public static ANSIString operator -(ANSIString text, ConsoleColor color)
         {
-            ANSIString s = (ANSIString)ANSIs.Clone();
-            s.BGColor = (short)(40 + s.ConsoleColorToInt(c));
-            var rgb = ANSIs.ConsoleColorToRGB(c);
-            ANSIs.SetBackgroundColor(rgb.Item1, rgb.Item2, rgb.Item3);
-            return s;
+            ArgumentNullException.ThrowIfNull(text);
+            ANSIString result = text.Clone();
+            result.SetBackgroundColor(color);
+            return result;
         }
     }
 }

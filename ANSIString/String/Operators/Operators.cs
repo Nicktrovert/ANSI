@@ -7,8 +7,13 @@
         /// </summary>
         public static ANSIString operator ~(ANSIString ANSIs)
         {
-            ANSIString s = (ANSIString)ANSIs.Clone();
-            s.Value = new string(s.Value.Reverse().ToArray());
+            ArgumentNullException.ThrowIfNull(ANSIs);
+            ANSIString s = ANSIs.Clone();
+            var elements = new List<string>();
+            var enumerator = System.Globalization.StringInfo.GetTextElementEnumerator(s.Value);
+            while (enumerator.MoveNext()) elements.Add(enumerator.GetTextElement());
+            elements.Reverse();
+            s.Value = string.Concat(elements);
             return s;
         }
 
@@ -17,7 +22,8 @@
         /// </summary>
         public static ANSIString operator -(ANSIString ANSIs)
         {
-            ANSIString s = (ANSIString)ANSIs.Clone();
+            ArgumentNullException.ThrowIfNull(ANSIs);
+            ANSIString s = ANSIs.Clone();
             s.Inverse = true;
             return s;
         }
